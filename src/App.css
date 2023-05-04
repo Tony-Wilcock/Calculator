@@ -1,38 +1,115 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --top-colour: #1e1e1e;
+  --bottom-colour: #00aacc;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
 .App {
-  text-align: center;
+  background: linear-gradient(
+    to bottom,
+    var(--top-colour),
+    var(--bottom-colour)
+  );
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.colour-picker {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  right: 20px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.colour-picker:nth-child(1) {
+  top: 20px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.colour-picker:nth-child(2) {
+  top: 70px;
+}
+
+.calc {
+  display: grid;
+  justify-content: center;
+  border: 1rem solid rgb(38, 44, 47);
+  border-radius: 1rem;
+  grid-template-columns: repeat(4, 6rem);
+  grid-template-rows: minmax(6rem, auto) repeat(5, 6rem);
+}
+
+.output {
+  height: 8rem;
+  grid-column: 1 / -1;
+  background-color: rgba(0, 0, 0, 0.65);
+  color: azure;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: flex-end;
+  justify-content: space-around;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
-.App-link {
-  color: #61dafb;
+.prev-operand {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1rem;
+  margin: 1rem;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.cur-operand {
+  color: rgba(255, 255, 255, 1);
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin: 1rem;
+}
+
+button {
+  cursor: pointer;
+  font-size: 1.8rem;
+  text-shadow: 0 0 5px #040404;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  outline: none;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: aliceblue;
+  padding: 0;
+}
+
+button:hover {
+  background-color: rgba(28, 28, 28, 0.5);
+}
+
+.pos,
+.neg {
+  font-size: 1.5rem;
+}
+
+.span-2 {
+  grid-column: span 2;
+}
+
+@media screen and (max-width: 530px) {
+  .calc {
+    grid-template-columns: repeat(4, 5rem);
+    grid-template-rows: minmax(6rem, auto) repeat(5, 5rem);
   }
-  to {
-    transform: rotate(360deg);
+
+  button {
+    font-size: 1rem;
+    font-weight: 500;
   }
 }
