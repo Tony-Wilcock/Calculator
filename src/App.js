@@ -158,30 +158,51 @@ function App() {
     {}
   );
 
+  window.addEventListener('load', () => {
+    const topColour = document.getElementById('top-colour');
+    const topColourValue = localStorage.getItem('topColour');
+    const bottomColour = document.getElementById('bottom-colour');
+    const bottomColourValue = localStorage.getItem('bottomColor');
+    if (topColourValue) {
+      document.documentElement.style.setProperty(
+        '--top-colour',
+        topColourValue
+      );
+      topColour.defaultValue = topColourValue;
+    }
+    if (bottomColourValue) {
+      document.documentElement.style.setProperty(
+        '--bottom-colour',
+        bottomColourValue
+      );
+      bottomColour.defaultValue = bottomColourValue;
+    }
+  });
+
   return (
     <div className='App'>
       <input
         id='top-colour'
         className='colour-picker top-clr'
         type='color'
-        defaultValue='#1e1e1e'
         onChange={(e) => {
           document.documentElement.style.setProperty(
             '--top-colour',
             e.target.value
           );
+          localStorage.setItem('topColour', e.target.value);
         }}
       ></input>
       <input
         id='bottom-colour'
         className='colour-picker b-clr'
         type='color'
-        defaultValue='#00aacc'
         onChange={(e) => {
           document.documentElement.style.setProperty(
             '--bottom-colour',
             e.target.value
           );
+          localStorage.setItem('bottomColor', e.target.value);
         }}
       ></input>
       <div className='calc'>
