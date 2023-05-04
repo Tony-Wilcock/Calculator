@@ -4,11 +4,6 @@
   box-sizing: border-box;
 }
 
-:root {
-  --top-colour: #1e1e1e;
-  --bottom-colour: #00aacc;
-}
-
 body {
   padding: 0;
   margin: 0;
