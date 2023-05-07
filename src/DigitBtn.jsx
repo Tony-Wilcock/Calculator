@@ -1,9 +1,16 @@
 import { ACTIONS } from './App';
+import { canAddDigit } from './App';
 
 export default function DigitBtn({ dispatch, digit }) {
   return (
     <button
-      onClick={() => dispatch({ type: ACTIONS.ADD_DIGIT, payload: { digit } })}
+      onClick={(e) => {
+        if (!canAddDigit) {
+          e.preventDefault();
+        } else {
+          dispatch({ type: ACTIONS.ADD_DIGIT, payload: { digit } });
+        }
+      }}
     >
       {digit}
     </button>

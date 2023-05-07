@@ -12,6 +12,8 @@ export const ACTIONS = {
   EVALUATE: 'evaluate',
 };
 
+export let canAddDigit = true;
+
 const INTEGER_FORMATTER = new Intl.NumberFormat('en-uk', {
   maximumFractionDigits: 0,
 });
@@ -25,6 +27,21 @@ const formatOperand = (operand) => {
     return INTEGER_FORMATTER.format(integer);
   }
   return `${INTEGER_FORMATTER.format(integer)}.${decimal}`;
+};
+
+const checkLength = (operand) => {
+  if (operand == null) return;
+
+  if (operand.length < 12) {
+    document.documentElement.style.setProperty('--digit-size', '2.5rem');
+    canAddDigit = true;
+  } else if (operand.length >= 12 && operand.length < 15) {
+    document.documentElement.style.setProperty('--digit-size', '2rem');
+    canAddDigit = true;
+  } else if (operand.length >= 15) {
+    document.documentElement.style.setProperty('--digit-size', '1.5rem');
+    canAddDigit = false;
+  }
 };
 
 const evaluate = ({ currentOperand, prevOperand, operation }) => {
@@ -48,6 +65,7 @@ const evaluate = ({ currentOperand, prevOperand, operation }) => {
       computation = prev / curr;
       break;
   }
+  checkLength(computation);
 
   return computation.toString();
 };
@@ -62,6 +80,7 @@ function reducer(state, { type, payload }) {
           overwrite: false,
         };
       }
+
       if (payload.digit === '0' && state.currentOperand === '0') {
         return state;
       }
@@ -74,6 +93,7 @@ function reducer(state, { type, payload }) {
       };
 
     case ACTIONS.DELETE_DIGIT:
+      canAddDigit = true;
       if (state.overwrite) {
         return {
           ...state,
@@ -97,15 +117,18 @@ function reducer(state, { type, payload }) {
       };
 
     case ACTIONS.CLEAR:
+      canAddDigit = true;
       return {};
 
     case ACTIONS.CLEAR_ENTRY:
+      canAddDigit = true;
       return {
         ...state,
         currentOperand: null,
       };
 
     case ACTIONS.CHOOSE_OPERATION:
+      canAddDigit = true;
       if (state.currentOperand == null && state.prevOperand == null) {
         return state;
       }
@@ -132,6 +155,7 @@ function reducer(state, { type, payload }) {
       };
 
     case ACTIONS.EVALUATE:
+      canAddDigit = true;
       if (
         state.operation == null ||
         state.currentOperand == null ||
@@ -153,10 +177,15 @@ function reducer(state, { type, payload }) {
 }
 
 function App() {
+  document.documentElement.style.setProperty('--digit-size', '2.5rem');
   const [{ currentOperand, prevOperand, operation }, dispatch] = useReducer(
     reducer,
     {}
   );
+
+  {
+    checkLength(currentOperand);
+  }
 
   window.addEventListener('load', () => {
     const topColour = document.getElementById('top-colour');
@@ -169,6 +198,8 @@ function App() {
         topColourValue
       );
       topColour.defaultValue = topColourValue;
+    } else {
+      topColour.defaultValue = '#ff0000';
     }
     if (bottomColourValue) {
       document.documentElement.style.setProperty(
@@ -176,6 +207,8 @@ function App() {
         bottomColourValue
       );
       bottomColour.defaultValue = bottomColourValue;
+    } else {
+      bottomColour.defaultValue = '#0000ff';
     }
   });
 
@@ -210,7 +243,9 @@ function App() {
           <div className='prev-operand'>
             {formatOperand(prevOperand)} {operation}
           </div>
-          <div className='cur-operand'>{formatOperand(currentOperand)}</div>
+          <div className='cur-operand' id='cur-operand'>
+            {formatOperand(currentOperand)}
+          </div>
         </div>
         <button onClick={() => dispatch({ type: ACTIONS.CLEAR_ENTRY })}>
           CE
