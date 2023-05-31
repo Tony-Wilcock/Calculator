@@ -183,22 +183,22 @@ function App() {
     const topColour = document.getElementById('top-colour');
     const topColourValue = localStorage.getItem('topColour');
     const bottomColour = document.getElementById('bottom-colour');
-    const bottomColourValue = localStorage.getItem('bottomColor');
+    const bottomColourValue = localStorage.getItem('bottomColour');
     if (topColourValue) {
+      topColour.defaultValue = topColourValue;
       document.documentElement.style.setProperty(
         '--top-colour',
         topColourValue
       );
-      topColour.defaultValue = topColourValue;
     } else {
       topColour.defaultValue = '#ff0000';
     }
     if (bottomColourValue) {
+      bottomColour.defaultValue = bottomColourValue;
       document.documentElement.style.setProperty(
         '--bottom-colour',
         bottomColourValue
       );
-      bottomColour.defaultValue = bottomColourValue;
     } else {
       bottomColour.defaultValue = '#0000ff';
     }
@@ -227,7 +227,7 @@ function App() {
             '--bottom-colour',
             e.target.value
           );
-          localStorage.setItem('bottomColor', e.target.value);
+          localStorage.setItem('bottomColour', e.target.value);
         }}
       ></input>
       <div className='calc'>
