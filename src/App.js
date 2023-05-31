@@ -29,16 +29,16 @@ const formatOperand = (operand) => {
   return `${INTEGER_FORMATTER.format(integer)}.${decimal}`;
 };
 
-const checkLength = (operand) => {
-  if (operand == null) return;
+const checkLength = (outputField) => {
+  if (outputField == null) return;
 
-  if (operand.length < 12) {
+  if (outputField.length < 12) {
     document.documentElement.style.setProperty('--digit-size', '2.5rem');
     canAddDigit = true;
-  } else if (operand.length >= 12 && operand.length < 15) {
+  } else if (outputField.length >= 12 && outputField.length < 15) {
     document.documentElement.style.setProperty('--digit-size', '2rem');
     canAddDigit = true;
-  } else if (operand.length >= 15) {
+  } else if (outputField.length >= 15) {
     document.documentElement.style.setProperty('--digit-size', '1.5rem');
     canAddDigit = false;
   }
@@ -84,7 +84,7 @@ function reducer(state, { type, payload }) {
       if (payload.digit === '0' && state.currentOperand === '0') {
         return state;
       }
-      if (payload.digit === '.' && state.currentOperand.includes('.')) {
+      if (payload.digit === '.' && state.currentOperand === '.') {
         return state;
       }
       return {
@@ -103,12 +103,6 @@ function reducer(state, { type, payload }) {
       }
       if (state.currentOperand == null) {
         return state;
-      }
-      if (state.currentOperand === 1) {
-        return {
-          ...state,
-          currentOperand: null,
-        };
       }
 
       return {
@@ -183,9 +177,7 @@ function App() {
     {}
   );
 
-  {
-    checkLength(currentOperand);
-  }
+  checkLength(currentOperand);
 
   window.addEventListener('load', () => {
     const topColour = document.getElementById('top-colour');
@@ -239,8 +231,11 @@ function App() {
         }}
       ></input>
       <div className='calc'>
+        <div className='options'>
+          <button className='options-btn'>=</button>
+        </div>
         <div className='output'>
-          <div className='prev-operand'>
+          <div className='prev-operand' id='prev-operand'>
             {formatOperand(prevOperand)} {operation}
           </div>
           <div className='cur-operand' id='cur-operand'>
